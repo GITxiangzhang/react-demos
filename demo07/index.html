@@ -10,12 +10,12 @@
     <script type="text/babel">
 var MyComponent = React.createClass({
   handleClick: function() {
-    this.refs.myTextInput.focus();
+    console.log(document.getElementById('dddd').value)
   },
   render: function() {
     return (
       <div>
-        <input type="text" ref="myTextInput" />
+        <input type="text" id="dddd" ref="myTextInput" />
         <input type="button" value="Focus the text input" onClick={this.handleClick} />
       </div>
     );
