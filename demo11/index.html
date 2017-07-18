@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8"/>
     <script src="../build/react.js"></script>
     <script src="../build/react-dom.js"></script>
     <script src="../build/browser.min.js"></script>
@@ -9,39 +10,38 @@
   <body>
     <div id="example"></div>
     <script type="text/babel">
-var UserGist = React.createClass({
-  getInitialState: function() {
-    return {
-      username: '',
-      lastGistUrl: ''
-    };
-  },
+        var GustList=React.createClass({
+            getInitialState:function () {
+                return {name:"",lastGistUrl:""};
+            },
+            componentDidMount:function () {
+                $.get(this.props.source,function (data) {
+                    var Gistlist=data[0];
+                    if(this.isMounted){
+                        this.setState({
+                            name:Gistlist.owner.login,
+                            lastGistUrl:Gistlist.html_url
+                        })
+                    }
 
-  componentDidMount: function() {
-    $.get(this.props.source, function(result) {
-      var lastGist = result[0];
-      if (this.isMounted()) {
-        this.setState({
-          username: lastGist.owner.login,
-          lastGistUrl: lastGist.html_url
-        });
-      }
-    }.bind(this));
-  },
+                }.bind(this))
+            },
+            render:function () {
+                return(
+                        <div>
+                            {this.state.name} 最后的发言在这
+                            {this.state.lastGistUrl}
+                        </div>
 
-  render: function() {
-    return (
-      <div>
-        {this.state.username}'s last gist is <a href={this.state.lastGistUrl}>here</a>.
-      </div>
-    );
-  }
-});
+                )
+            }
+        })
+        ReactDOM.render(
+                <GustList source="https://api.github.com/users/octocat/gists" />,
+            document.getElementById('example')
+        );
 
-ReactDOM.render(
-  <UserGist source="https://api.github.com/users/octocat/gists" />,
-  document.getElementById('example')
-);
     </script>
   </body>
 </html>
+
